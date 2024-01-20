@@ -30,7 +30,7 @@ function Header() {
 
       </Button>
       <Link to='/signin'>
-      <Button gradientDuoTone='purpleToBlue' pill> Sign in</Button>
+      <Button gradientDuoTone='purpleToBlue' pill outline> Sign in</Button>
       </Link>
     <Navbar.Toggle></Navbar.Toggle>
      </div>
