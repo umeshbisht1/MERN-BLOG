@@ -20,3 +20,11 @@ app.get("/",(req,res)=>{
 })
 app.use("/api/user",userrouter);
 app.use("/api/auth",authroute);
+app.use((err,req,res,next)=>{
+    const statuscode=err.statuscode||500;
+    const message=err.message||"internal server error";
+    res.status(statuscode).json({success:false,
+    message,
+    statuscode
+    })
+})
