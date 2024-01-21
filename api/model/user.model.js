@@ -14,7 +14,7 @@ const userschema=new Schema({
     password:{
         type:String,
         required:true,
-        select:false,
+       
     },
 },{timestamps:true});
 export const User=mongoose.model("User",userschema)
