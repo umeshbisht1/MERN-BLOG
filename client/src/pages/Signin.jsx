@@ -8,7 +8,8 @@ export default function Signin() {
   const [formData,setFormdata]=useState({});
 
   const dispatch=useDispatch();
-  const {loading,error:errormessage}=useSelector(state=>state.User)
+  const loading=useSelector(state=>state.user.loading)
+  const errormessage=useSelector(state=>state.user.errror)
   const navigate=useNavigate();
   const handleChange=(e)=>{
    setFormdata({...formData,[e.target.id]:e.target.value.trim()})
