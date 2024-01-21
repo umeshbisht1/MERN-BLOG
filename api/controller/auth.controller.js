@@ -12,7 +12,7 @@ export const signup=async(req,res,next)=>{
    try {
     const user= await User.create({email,username,password:hashedpassword});
 
-    res.status(500).json({message:"user signup successfully",data:user});
+    res.status(200).json({message:"user signup successfully",data:user});
    } catch (error) {
     next(error)
    }
