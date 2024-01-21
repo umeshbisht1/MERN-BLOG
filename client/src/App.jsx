@@ -7,6 +7,7 @@ import Project from './pages/Project.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Home from './pages/Home.jsx'
 import Header from './components/Header.jsx'
+import Footer from './components/Footer.jsx'
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
     <Route path='/dashborad' element={<Dashboard/>}></Route>
     <Route path='/project' element={<Project />}></Route>
    </Routes>
-   
+   <Footer></Footer>
    </BrowserRouter>
   )
 }

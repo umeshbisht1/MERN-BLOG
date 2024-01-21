@@ -50,7 +50,7 @@ function Signup() {
             </span>
             Blog
           </Link>
-          <p>
+          <p className="mt-4">
             This is demo project you can signup with your email and password or
             with the google
           </p>
