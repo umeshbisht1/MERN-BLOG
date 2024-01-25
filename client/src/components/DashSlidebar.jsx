@@ -23,7 +23,9 @@ function DashSlidebar() {
                 active={tab === "profile"}
                 icon={HiUser}
                 label={"user"}
-                labelColor="dark">
+                labelColor="dark"
+                as='div'
+                >
                 Proofile
               </Sidebar.Item>
               </Link>

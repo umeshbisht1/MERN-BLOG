@@ -19,9 +19,9 @@ function Dashboard() {
      <div className="md:w-56">
       <DashSlidebar/>
       </div>  
-     <div className="">
+    
      {tab==='profile'&& <Profile/>}
-     </div>
+     
     </div>
   )
 }
