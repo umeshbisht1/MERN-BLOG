@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { Button, TextInput ,Alert} from "flowbite-react";
 import { useRef } from "react";
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { updateSuccess,updateFailure,updateStart } from "../redux/user/user.slice.js";
 
 import {app} from '../Firebase.js'
 import {
@@ -18,6 +19,8 @@ function Profile() {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  const[formData,setFormData]=useState({});
+  const dispatch=useDispatch()
   const fileref=useRef();
   const handleImageChange=(e)=>{
     const file=e.target.files[0]
@@ -33,6 +36,39 @@ function Profile() {
       uploadImage();
     }
   },[imageFile]);
+  const handlesubmit=async(e)=>{
+   
+    e.preventDefault();
+   
+    if(Object.keys(formData).length===0)
+    {
+      console.log("error");
+      return;
+    }
+    try {
+      dispatch(updateStart());
+      console.log("umesh",formData);
+      const res=await fetch(`/api/user/update/${currentUser._id}`,{
+        method:'PUT',
+        headers:{
+          'Content-type':'application/json'
+        },
+        body:JSON.stringify(formData)
+      });
+      const data=await res.json();
+      console.log(data);
+      if(!res.ok)
+      dispatch(updateFailure(data.message));
+    else
+    dispatch(updateSuccess(data));
+    } catch (error) {
+      dispatch(updateFailure(error.message))
+    }
+  }
+  const handleChange=(e=>{
+    setFormData({...formData,[e.target.id]:e.target.value})
+  })
+  
   const uploadImage = async () => {
     // service firebase.storage {
     //   match /b/{bucket}/o {
@@ -79,7 +115,7 @@ function Profile() {
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handlesubmit}>
         <input type="file" accept="image/*" onChange={handleImageChange} ref={fileref} hidden />
         <div className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full" onClick={()=>fileref.current.click()}>
         {imageFileUploadProgress && (
@@ -121,17 +157,20 @@ function Profile() {
           id="username"
           placeholder="username"
           defaultValue={currentUser.username}
+          onChange={handleChange}
         ></TextInput>
         <TextInput
           type="email"
           id="username"
           placeholder="email"
           defaultValue={currentUser.email}
+          onChange={handleChange}
         ></TextInput>
         <TextInput
           type="password"
           id="password"
           placeholder="password"
+          onChange={handleChange}
         ></TextInput>
         <Button type="submit" gradientDuoTone="purpleToBlue" outline>
           Update
