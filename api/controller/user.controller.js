@@ -46,3 +46,13 @@ export const update = async (req, res, next) => {
     next(error);
   }
 };
+export const deleteaccount=async(req,res,next)=>{
+  if(req.user._id!==req.params.id)
+  return next(errorhandler(403,"u are  not the valid user"));
+  try {
+    await User.findByIdAndDelete(req.user._id);
+    return res.status(200).json({message:"user have beeen deleted successfully"});
+  } catch (error) {
+    next(err);
+  }
+}
