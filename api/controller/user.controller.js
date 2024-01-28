@@ -56,3 +56,11 @@ export const deleteaccount=async(req,res,next)=>{
     next(err);
   }
 }
+export const signout=async(req,res,next)=>{
+  console.log("umesh isngh  bisht");
+  try {
+      return  res.status(200).clearCookie('access_token').json({statuscode:200,message:"user signout sucessfully"});
+  } catch (error) {
+    return next(error.message)
+  }
+}
