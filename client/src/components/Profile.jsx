@@ -3,15 +3,17 @@ import { useSelector,useDispatch } from "react-redux";
 import { Button, TextInput ,Alert} from "flowbite-react";
 import { useRef } from "react";
 import { CircularProgressbar } from 'react-circular-progressbar';
-import { updateSuccess,updateFailure,updateStart } from "../redux/user/user.slice.js";
-
+import { updateSuccess,updateFailure,updateStart,deleteFailure,deleteStart,deleteSuccess } from "../redux/user/user.slice.js";
+import { Modal } from "flowbite-react";
 import {app} from '../Firebase.js'
+import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
+import { Model } from "mongoose";
 function Profile() {
   const currentUser = useSelector((state) => state.user.currentUser.data);
   const [imageFile,setImageFile]=useState(null);
@@ -20,6 +22,7 @@ function Profile() {
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const[formData,setFormData]=useState({});
+  const [showModel,setShowmodel]=useState(false)
   const dispatch=useDispatch()
   const fileref=useRef();
   const handleImageChange=(e)=>{
@@ -31,11 +34,13 @@ function Profile() {
     }
 
   }
+  // upload image in firebase
   useEffect(()=>{
     if(imageFile){
       uploadImage();
     }
   },[imageFile]);
+  // submit th update section
   const handlesubmit=async(e)=>{
    
     e.preventDefault();
@@ -45,6 +50,7 @@ function Profile() {
       console.log("error");
       return;
     }
+    // connect to backend
     try {
       dispatch(updateStart());
       console.log("umesh",formData);
@@ -65,10 +71,11 @@ function Profile() {
       dispatch(updateFailure(error.message))
     }
   }
+  // filling th evalues of the input feild in input feild
   const handleChange=(e=>{
     setFormData({...formData,[e.target.id]:e.target.value})
   })
-  
+  //function to upload in 
   const uploadImage = async () => {
     // service firebase.storage {
     //   match /b/{bucket}/o {
@@ -112,6 +119,25 @@ function Profile() {
       }
     );
   };
+  const handledelete=async()=>{
+    setShowmodel(false)
+     try {
+      dispatch(deleteStart());
+      const res=await fetch(`/api/user/delete/${currentUser._id}`,{
+        method:"DELETE",
+       })
+       const data=await res.json();
+       if(!res.ok)
+       {
+        dispatch(deleteFailure(data.message))
+        return;
+       }
+       dispatch(deleteSuccess())
+     } catch (error) {
+      dispatch(deleteFailure(error.message))
+     }
+    
+  }
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold">Profile</h1>
@@ -177,9 +203,23 @@ function Profile() {
         </Button>
       </form>
       <div className="text-red-500 flex justify-between mt-5">
-        <span className="cursor-pointer">Delete Account</span>
+        <span onClick={()=>setShowmodel(true)} className="cursor-pointer">Delete Account</span>
         <span className="cursor-pointer">Sign-Out</span>
       </div>
+     <Modal show={showModel} onClose={()=>setShowmodel(false)} popup size="md" >
+      <Modal.Header>
+        <Modal.Body>
+       <div className="text-center">
+        <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'></HiOutlineExclamationCircle>
+       </div>
+       <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">Are you sure You want to delete account</h3>
+       <div className=" flex justify-between">
+        <Button color="failure" onClick={handledelete} > Yes Delete</Button>
+        <Button onClick={()=>setShowmodel(false)}  > Cancel</Button>
+       </div>
+        </Modal.Body>
+      </Modal.Header>
+     </Modal>
     </div>
   );
 }
