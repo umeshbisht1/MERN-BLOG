@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import userrouter from './Routes/user.router.js'
 import authroute from './Routes/auth.router.js'
 import cookieParser from 'cookie-parser'
+import postrouter from './Routes/Post.route.js'
 dotenv.config()
 
 await mongoose.connect(process.env.MONGO_DB).then(()=>{
@@ -22,6 +23,7 @@ app.get("/",(req,res)=>{
 })
 app.use("/api/user",userrouter);
 app.use("/api/auth",authroute);
+app.use("/api/post",postrouter)
 app.use((err,req,res,next)=>{
     const statuscode=err.statuscode||500;
     const message=err.message||"internal server error";
