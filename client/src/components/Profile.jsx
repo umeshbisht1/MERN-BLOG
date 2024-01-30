@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, TextInput, Alert } from "flowbite-react";
 import { useRef } from "react";
+import {Link} from 'react-router-dom'
 import { CircularProgressbar } from "react-circular-progressbar";
 import {
   updateSuccess,
@@ -22,9 +23,10 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Model } from "mongoose";
+
 function Profile() {
   const currentUser = useSelector((state) => state.user.currentUser.data);
+  const loading=useSelector(state=>state.user.loading)
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageurl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -222,9 +224,14 @@ function Profile() {
           placeholder="password"
           onChange={handleChange}
         ></TextInput>
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button type="submit" gradientDuoTone="purpleToBlue" outline disabled={loading||imageFileUploading}>
+          {loading?'Loading..':'Update'}
         </Button>
+        {
+          currentUser.isAdmin&&(<Link to='/create-post'>
+          <Button type="button" gradientDuoTone='purpleToPink' className="w-full" > Create a Post </Button>
+          </Link>)
+        }
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span onClick={() => setShowmodel(true)} className="cursor-pointer">

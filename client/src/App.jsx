@@ -9,6 +9,8 @@ import Home from "./pages/Home.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Protected from "./components/Protected.jsx";
+import Adminprotected from "./components/Adminprotected.jsx";
+import CreatePost from "./pages/CreatePost.jsx";
 
 function App() {
   return (
@@ -22,6 +24,9 @@ function App() {
         <Route path="/signup" element={<Signup />}></Route>
         <Route element={<Protected />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+        </Route>
+        <Route element={<Adminprotected/>}>
+          <Route path="/create-post" element={<CreatePost/>}></Route>
         </Route>
         <Route path="/project" element={<Project />}></Route>
       </Routes>
