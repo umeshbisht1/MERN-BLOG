@@ -90,7 +90,7 @@ export default function CreatePost() {
             disabled={ImageFileUploadProgress}
           >
            {
-            ImageFileUploadProgress ?<div className="w-10 h-10 object-cover"><CircularProgressbar value={ImageFileUploadProgress} text={`${ImageFileUploadProgress||0}%`}></CircularProgressbar></div>:" Upload Image"
+            ImageFileUploadProgress ?<div className="w-16 h-16 object-cover"><CircularProgressbar value={ImageFileUploadProgress} text={`${ImageFileUploadProgress||0}%`}></CircularProgressbar></div>:" Upload Image"
            }
 
           </Button>

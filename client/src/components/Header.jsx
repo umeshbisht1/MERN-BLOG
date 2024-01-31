@@ -67,6 +67,7 @@ function Header() {
                 alt="user_avatar"
                 img={currentuser.profilePicture}
                 rounded
+                className="object-cover"
               />
             }
           >
