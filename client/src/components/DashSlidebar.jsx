@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Sidebar } from "flowbite-react";
 import { useLocation, Link } from "react-router-dom";
-import { HiUser, HiArrowSmRight } from "react-icons/hi";
-import {  useDispatch } from "react-redux";
+import { HiUser, HiArrowSmRight, HiDocumentText } from "react-icons/hi";
+import {  useDispatch, useSelector } from "react-redux";
 import { signoutSuccess } from "../redux/user/user.slice.js";
+
 function DashSlidebar() {
   const dispatch=useDispatch()
   const location = useLocation();
   const [tab, setTab] = useState("");
+  const currentUser=useSelector(state=>state.user.currentUser.data)
   useEffect(() => {
     const urlprams = new URLSearchParams(location.search);
     const tabFromUrl = urlprams.get("tab");
@@ -40,14 +42,24 @@ function DashSlidebar() {
               <Sidebar.Item
                 active={tab === "profile"}
                 icon={HiUser}
-                label={"user"}
+                label={currentUser.isAdmin?"Admin":"user"}
                 labelColor="dark"
                 as='div'
                 >
                 Proofile
               </Sidebar.Item>
               </Link>
-              
+              {
+                currentUser.isAdmin && <Link to='/dashboard?tab=post'>
+                <Sidebar.Item
+                  active={tab === "posts"}
+                 icon={HiDocumentText}
+                  as='div'
+                  >
+                  Post
+                </Sidebar.Item>
+                </Link>
+              }
               <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer" onClick={handlesignout}>
                 Sign Out
               </Sidebar.Item>
