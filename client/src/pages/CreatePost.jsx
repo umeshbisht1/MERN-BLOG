@@ -10,8 +10,9 @@ import {
 } from "firebase/storage";
 import { app } from "../Firebase.js";
 import { CircularProgressbar } from "react-circular-progressbar";
-
+import { useNavigate } from "react-router-dom";
 export default function CreatePost() {
+  const navigate=useNavigate();
   const [file, setFile] = useState(null);
   const [ImageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [ImageFileUploadError, setImageFileUploadError] = useState(null);
@@ -62,25 +63,28 @@ export default function CreatePost() {
       return;
     }
     try {
-      const data = await fetch("/api/post/create", {
+      const res = await fetch("/api/post/create", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       });
-      const res=await data.json();
-      console.log(res);
-      if(!data.ok)
+      const data=await res.json();
+     
+      if(!res.ok)
       {
-        setPublishError(data.mesage);
-        console.log(`error occured in uploading the post ${data.mesage}`);
+        setPublishError(res.mesage);
+        console.log(`error occured in uploading the post ${res.mesage}`);
         return;
       }
-      if(data.ok)
+      if(res.ok)
       {
         setPublishError(null)
+        
+        navigate(`/post/${data.data.slug}`)
       }
+
     } catch (error) {
       setPublishError("Something went wrong bawa");
     }
