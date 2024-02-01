@@ -54,13 +54,12 @@ function Profile() {
     e.preventDefault();
 
     if (Object.keys(formData).length === 0) {
-      console.log("error");
       return;
     }
     // connect to backend
     try {
       dispatch(updateStart());
-      console.log("umesh", formData);
+     
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "PUT",
         headers: {
@@ -69,7 +68,7 @@ function Profile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+      
       if (!res.ok) dispatch(updateFailure(data.message));
       else dispatch(updateSuccess(data));
     } catch (error) {
